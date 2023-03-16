@@ -43,6 +43,10 @@ public class projectTwo {
         WebElement calculateButton = driver.findElement(By.xpath("/html/body/form/table/tbody/tr/td[2]/div[2]/table/tbody/tr/td/ol[1]/li[5]/input[2]")); // finding the Calculate button
         calculateButton.click(); // clicking
 
+        Thread.sleep(300);
+
+
+
 
         // driver.close();
 
