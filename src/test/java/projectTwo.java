@@ -1,3 +1,4 @@
+import com.github.javafaker.CreditCardType;
 import com.github.javafaker.Faker;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -9,6 +10,7 @@ import org.testng.annotations.Test;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @Test
 public class projectTwo {
@@ -74,7 +76,7 @@ public class projectTwo {
         WebElement zip = driver.findElement(By.id("ctl00_MainContent_fmwOrder_TextBox5"));  // copying as a confirmation of the email
         zip.sendKeys(faker.address().zipCode());
 
-        List<Integer> givenList = Arrays.asList(1, 2, 3); // dynamic way to randomly select a credit card and click
+        List<Integer> givenList = Arrays.asList(1, 2, 3); // dynamic way to randomly select a credit card and click (may also be used with Strings)
         int card = (int) (1 + Math.random() * givenList.size());
 
         // int card = (int) (1 + Math.random() * 3); // an easier, but hardcoded way to randomly select a credit card and click
@@ -93,7 +95,15 @@ public class projectTwo {
                 break;
         }
 
+        if (card == 1){WebElement cVisa = driver.findElement(By.id("ctl00_MainContent_fmwOrder_TextBox6")); // replacing first digit of the cc number
+            cVisa.sendKeys(faker.finance().creditCard(CreditCardType.VISA).replaceFirst("^.","4"));}
+        if (card == 2){WebElement cMastercard = driver.findElement(By.id("ctl00_MainContent_fmwOrder_TextBox6"));
+            cMastercard.sendKeys(faker.finance().creditCard(CreditCardType.MASTERCARD).replaceFirst("^.","5"));}
+        if (card == 3){WebElement cAmex = driver.findElement(By.id("ctl00_MainContent_fmwOrder_TextBox6"));
+                cAmex.sendKeys(faker.finance().creditCard(CreditCardType.AMERICAN_EXPRESS).replaceFirst("^.","3"));}
 
+        WebElement expiration = driver.findElement(By.id("ctl00_MainContent_fmwOrder_TextBox1")); // generating random future date
+        expiration.sendKeys(faker.date().future(5000, 180, TimeUnit.DAYS));
 
             // driver.close();
 
