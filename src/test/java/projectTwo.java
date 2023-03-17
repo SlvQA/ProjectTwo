@@ -1,3 +1,4 @@
+import com.github.javafaker.Faker;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -51,7 +52,19 @@ public class projectTwo {
         int correctTotal;
         if (quant < 10 && quant > 0){correctTotal = quant * 100;}else{correctTotal = quant * (100 - (100*8)/100);};
 
-        Assert.assertEquals(actualTotal, correctTotal, "Total was calculated incorrectly. Expected: " + correctTotal + ". Actual: " + actualTotal);
+        Assert.assertEquals(actualTotal, correctTotal, "Total was calculated incorrectly.");
+
+        Faker faker = new Faker();
+        WebElement customerName = driver.findElement(By.id("ctl00_MainContent_fmwOrder_txtName"));
+        username.sendKeys(faker.name().firstName() + " " + faker.name().lastName());
+        WebElement street = driver.findElement(By.id("ctl00_MainContent_fmwOrder_TextBox2"));
+        street.sendKeys(faker.address().streetAddress());
+        WebElement city = driver.findElement(By.id("ctl00_MainContent_fmwOrder_TextBox3"));
+        city.sendKeys(faker.address().city());
+        WebElement state = driver.findElement(By.id("ctl00_MainContent_fmwOrder_TextBox4")); // creating email
+        state.sendKeys(faker.address().state());
+        WebElement zip = driver.findElement(By.id("ctl00_MainContent_fmwOrder_TextBox5"));  // copying as a confirmation of the email
+        zip.sendKeys(faker.address().zipCode());
 
 
 
