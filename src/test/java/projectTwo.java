@@ -37,6 +37,7 @@ public class projectTwo {
 
         WebElement quantity = driver.findElement(By.id("ctl00_MainContent_fmwOrder_txtQuantity")); // input of quantity
         quantity.sendKeys(""+(int)(1 + Math.random()*100));
+        int quant = Integer.parseInt(quantity.getAttribute("value")); // storing quantity for future use
 
         Thread.sleep(300);
 
@@ -45,6 +46,12 @@ public class projectTwo {
 
         Thread.sleep(300);
 
+        WebElement total = driver.findElement(By.id("ctl00_MainContent_fmwOrder_txtTotal")); // getting total from the field and checking if it was calculated correctly
+        int actualTotal = Integer.parseInt(total.getAttribute("value"));
+        int correctTotal;
+        if (quant < 10 && quant > 0){correctTotal = quant * 100;}else{correctTotal = quant * (100 - (100*8)/100);};
+
+        Assert.assertEquals(actualTotal, correctTotal, "Total was calculated incorrectly. Expected: " + correctTotal + ". Actual: " + actualTotal);
 
 
 
