@@ -7,6 +7,9 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import java.util.Arrays;
+import java.util.List;
+
 @Test
 public class projectTwo {
     public void test() throws InterruptedException {
@@ -71,7 +74,10 @@ public class projectTwo {
         WebElement zip = driver.findElement(By.id("ctl00_MainContent_fmwOrder_TextBox5"));  // copying as a confirmation of the email
         zip.sendKeys(faker.address().zipCode());
 
-        int card = (int) (1 + Math.random() * 3); // randomly select a credit card and click
+        List<Integer> givenList = Arrays.asList(1, 2, 3); // dynamic way to randomly select a credit card and click
+        int card = (int) (1 + Math.random() * givenList.size());
+
+        // int card = (int) (1 + Math.random() * 3); // an easier, but hardcoded way to randomly select a credit card and click
         switch (card) {
             case 1:
                 WebElement visa = driver.findElement(By.id("ctl00_MainContent_fmwOrder_cardList_0"));
