@@ -37,7 +37,7 @@ public class projectTwo {
         Thread.sleep(500);
 
         WebElement quantity = driver.findElement(By.id("ctl00_MainContent_fmwOrder_txtQuantity")); // input of quantity
-        quantity.sendKeys(""+(int)(1 + Math.random()*100));
+        quantity.sendKeys("" + (int) (1 + Math.random() * 100));
         int quant = Integer.parseInt(quantity.getAttribute("value")); // storing quantity for future use
 
         Thread.sleep(300);
@@ -50,13 +50,18 @@ public class projectTwo {
         WebElement total = driver.findElement(By.id("ctl00_MainContent_fmwOrder_txtTotal")); // getting total from the field and checking if it was calculated correctly
         int actualTotal = Integer.parseInt(total.getAttribute("value"));
         int correctTotal;
-        if (quant < 10 && quant > 0){correctTotal = quant * 100;}else{correctTotal = quant * (100 - (100*8)/100);};
+        if (quant < 10 && quant > 0) {
+            correctTotal = quant * 100;
+        } else {
+            correctTotal = quant * (100 - (100 * 8) / 100);
+        }
+        ;
 
         Assert.assertEquals(actualTotal, correctTotal, "Total was calculated incorrectly.");
 
         Faker faker = new Faker();
         WebElement customerName = driver.findElement(By.id("ctl00_MainContent_fmwOrder_txtName"));
-        username.sendKeys(faker.name().firstName() + " " + faker.name().lastName());
+        customerName.sendKeys(faker.name().firstName() + " " + faker.name().lastName());
         WebElement street = driver.findElement(By.id("ctl00_MainContent_fmwOrder_TextBox2"));
         street.sendKeys(faker.address().streetAddress());
         WebElement city = driver.findElement(By.id("ctl00_MainContent_fmwOrder_TextBox3"));
@@ -66,9 +71,26 @@ public class projectTwo {
         WebElement zip = driver.findElement(By.id("ctl00_MainContent_fmwOrder_TextBox5"));  // copying as a confirmation of the email
         zip.sendKeys(faker.address().zipCode());
 
+        int card = (int) (1 + Math.random() * 3); // randomly select a credit card and click
+        switch (card) {
+            case 1:
+                WebElement visa = driver.findElement(By.id("ctl00_MainContent_fmwOrder_cardList_0"));
+                visa.click();
+                break;
+            case 2:
+                WebElement mastercard = driver.findElement(By.id("ctl00_MainContent_fmwOrder_cardList_1"));
+                mastercard.click();
+                break;
+            case 3:
+                WebElement amex = driver.findElement(By.id("ctl00_MainContent_fmwOrder_cardList_2"));
+                amex.click();
+                break;
+        }
 
 
-        // driver.close();
 
+            // driver.close();
+
+        }
     }
-}
+
