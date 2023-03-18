@@ -8,6 +8,9 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import java.lang.reflect.Parameter;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -96,14 +99,21 @@ public class projectTwo {
         }
 
         if (card == 1){WebElement cVisa = driver.findElement(By.id("ctl00_MainContent_fmwOrder_TextBox6")); // replacing first digit of the cc number
-            cVisa.sendKeys(faker.finance().creditCard(CreditCardType.VISA).replaceFirst("^.","4"));}
+            cVisa.sendKeys(faker.finance().creditCard(CreditCardType.VISA).replaceFirst("^.","4").replaceAll("-",""));}
         if (card == 2){WebElement cMastercard = driver.findElement(By.id("ctl00_MainContent_fmwOrder_TextBox6"));
-            cMastercard.sendKeys(faker.finance().creditCard(CreditCardType.MASTERCARD).replaceFirst("^.","5"));}
+            cMastercard.sendKeys(faker.finance().creditCard(CreditCardType.MASTERCARD).replaceFirst("^.","5").replaceAll("-",""));}
         if (card == 3){WebElement cAmex = driver.findElement(By.id("ctl00_MainContent_fmwOrder_TextBox6"));
-                cAmex.sendKeys(faker.finance().creditCard(CreditCardType.AMERICAN_EXPRESS).replaceFirst("^.","3"));}
+                cAmex.sendKeys(faker.finance().creditCard(CreditCardType.AMERICAN_EXPRESS).replaceFirst("^.","3").replaceAll("-",""));}
 
         WebElement expiration = driver.findElement(By.id("ctl00_MainContent_fmwOrder_TextBox1")); // generating random future date
-        expiration.sendKeys(faker.date().future(5000, 180, TimeUnit.DAYS));
+        LocalDate date = LocalDate.now().plusMonths((int)(1+Math.random()*36));
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/yy");
+        String dateStr = date.format(formatter);
+        expiration.sendKeys(dateStr);
+
+        WebElement processButton = driver.findElement(By.id("ctl00_MainContent_fmwOrder_InsertButton"));
+        processButton.click();
+
 
             // driver.close();
 
