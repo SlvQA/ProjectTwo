@@ -62,8 +62,7 @@ public class projectTwo {
             correctTotal = quant * 100;
         } else {
             correctTotal = quant * (100 - (100 * 8) / 100);
-        }
-        ;
+        };
 
         Assert.assertEquals(actualTotal, correctTotal, "Total was calculated incorrectly.");
 
@@ -114,8 +113,23 @@ public class projectTwo {
         WebElement processButton = driver.findElement(By.id("ctl00_MainContent_fmwOrder_InsertButton"));
         processButton.click();
 
+        Thread.sleep(300);
 
-            // driver.close();
+        String pageSource =  driver.getPageSource(); // getting page Source code
+        driver.getPageSource();
+        String text = "New order has been successfully added."; // checking if the Source code contains the needed text
+        Assert.assertTrue(pageSource.contains(text), "The needed text was not found, this may be a wrong page.");
+
+        WebElement allOrdersLink = driver.findElement(By.linkText("View all orders")); // finding the "View All Orders" link
+        allOrdersLink.click(); // clicking
+
+        --------
+        String firstRow =  driver.findElement(By.id("ctl00_MainContent_orderGrid_ctl02_OrderSelector").getText()); // getting text
+        String text2 = ""; // checking if the Source code contains the needed text
+        Assert.assertTrue(pageSource.contains(text), "The needed text was not found, the order was not placed.");
+        --------
+
+        // driver.close();
 
         }
     }
