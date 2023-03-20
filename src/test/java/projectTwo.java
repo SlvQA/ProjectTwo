@@ -126,8 +126,8 @@ public class projectTwo {
         LocalDate datePlaced = LocalDate.now();
         List<WebElement> tds = driver.findElements(By.xpath("//table[@class='SampleTable']//tr[2]//td"));
         List<String> firstRow = new ArrayList<>();
-        for (WebElement tr : tds){
-            firstRow.add(tr.getText());}
+        for (WebElement element : tds){
+            firstRow.add(element.getText());}
 
         Assert.assertEquals(firstRow, List.of("", customerName, "MyMoney", quant, datePlaced, street, city, state, zipFive, card, crdNum, expiration, ""));
 
