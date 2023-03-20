@@ -131,8 +131,10 @@ public class projectTwo {
 
         Assert.assertEquals(firstRow, List.of("", customerName, "MyMoney", quant, datePlaced, street, city, state, zipFive, card, crdNum, expiration, ""));
 
-        // driver.close();
+        driver.findElement(By.id("ctl00_logout")).click();
 
+        Thread.sleep(500);
+        driver.close();
         }
     }
 
