@@ -9,6 +9,7 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -93,11 +94,17 @@ public class projectTwo {
         }
 
         if (card == 1){WebElement cVisa = driver.findElement(By.id("ctl00_MainContent_fmwOrder_TextBox6")); // replacing first digit of the cc number
-            cVisa.sendKeys(faker.finance().creditCard(CreditCardType.VISA).replaceFirst("^.","4").replaceAll("-",""));}
+            cVisa.sendKeys(faker.finance().creditCard(CreditCardType.VISA).replaceFirst("^.","4").replaceAll("-",""));
+            }
         if (card == 2){WebElement cMastercard = driver.findElement(By.id("ctl00_MainContent_fmwOrder_TextBox6"));
-            cMastercard.sendKeys(faker.finance().creditCard(CreditCardType.MASTERCARD).replaceFirst("^.","5").replaceAll("-",""));}
+            cMastercard.sendKeys(faker.finance().creditCard(CreditCardType.MASTERCARD).replaceFirst("^.","5").replaceAll("-",""));
+            }
         if (card == 3){WebElement cAmex = driver.findElement(By.id("ctl00_MainContent_fmwOrder_TextBox6"));
-                cAmex.sendKeys(faker.finance().creditCard(CreditCardType.AMERICAN_EXPRESS).replaceFirst("^.","3").replaceAll("-",""));}
+            cAmex.sendKeys(faker.finance().creditCard(CreditCardType.AMERICAN_EXPRESS).replaceFirst("^.","3").replaceAll("-",""));
+            }
+
+        WebElement cardNumber = driver.findElement(By.id("ctl00_MainContent_fmwOrder_TextBox6"));
+        String crdNum = cardNumber.getAttribute("value");
 
         WebElement expiration = driver.findElement(By.id("ctl00_MainContent_fmwOrder_TextBox1")); // generating random future date
         LocalDate date = LocalDate.now().plusMonths((int)(1+Math.random()*36));
@@ -116,14 +123,13 @@ public class projectTwo {
 
         driver.findElement(By.linkText("View all orders")).click(); // finding the "View All Orders" link
 
-        List<WebElement> firstRow = driver.findElements(By.xpath("//table[@class='SampleTable']"));
-        for (WebElement result : firstRow){
-            System.out.println(result.getText());}
+        LocalDate datePlaced = LocalDate.now();
+        List<WebElement> tds = driver.findElements(By.xpath("//table[@class='SampleTable']//tr[2]//td"));
+        List<String> firstRow = new ArrayList<>();
+        for (WebElement tr : tds){
+            firstRow.add(tr.getText());}
 
-
-//        String text2 = ""; // checking if the Source code contains the needed text
-//        Assert.assertTrue(pageSource.contains(text), "The needed text was not found, the order was not placed.");
-
+        Assert.assertEquals(firstRow, List.of("", customerName, "MyMoney", quant, datePlaced, street, city, state, zipFive, card, crdNum, expiration, ""));
 
         // driver.close();
 
