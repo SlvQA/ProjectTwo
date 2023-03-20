@@ -7,13 +7,10 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.testng.Assert;
 import org.testng.annotations.Test;
-
-import java.lang.reflect.Parameter;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 @Test
 public class projectTwo {
@@ -34,24 +31,21 @@ public class projectTwo {
         username.sendKeys("Tester");
         WebElement logInPass = driver.findElement(By.id("ctl00_MainContent_password"));
         logInPass.sendKeys("test");
-        WebElement LogInButton = driver.findElement(By.id("ctl00_MainContent_login_button")); // finding the LogIn button
-        LogInButton.click(); // clicking
+        driver.findElement(By.id("ctl00_MainContent_login_button")).click(); // finding the LogIn button and clicking it
 
         Thread.sleep(500);
 
-        WebElement ordersButton = driver.findElement(By.linkText("Order")); // finding the Order button
-        ordersButton.click(); // clicking
+        driver.findElement(By.linkText("Order")).click(); // finding the Order button and clicking it
 
         Thread.sleep(500);
 
         WebElement quantity = driver.findElement(By.id("ctl00_MainContent_fmwOrder_txtQuantity")); // input of quantity
-        quantity.sendKeys("" + (int) (1 + Math.random() * 100));
+        quantity.sendKeys("" + (int) Math.abs(1 + Math.random() * 100));
         int quant = Integer.parseInt(quantity.getAttribute("value")); // storing quantity for future use
 
         Thread.sleep(300);
 
-        WebElement calculateButton = driver.findElement(By.xpath("/html/body/form/table/tbody/tr/td[2]/div[2]/table/tbody/tr/td/ol[1]/li[5]/input[2]")); // finding the Calculate button
-        calculateButton.click(); // clicking
+        driver.findElement(By.xpath("/html/body/form/table/tbody/tr/td[2]/div[2]/table/tbody/tr/td/ol[1]/li[5]/input[2]")).click(); // finding the Calculate button and clicking it
 
         Thread.sleep(300);
 
@@ -76,7 +70,8 @@ public class projectTwo {
         WebElement state = driver.findElement(By.id("ctl00_MainContent_fmwOrder_TextBox4")); // creating email
         state.sendKeys(faker.address().state());
         WebElement zip = driver.findElement(By.id("ctl00_MainContent_fmwOrder_TextBox5"));  // copying as a confirmation of the email
-        zip.sendKeys(faker.address().zipCode());
+        String zipFive = faker.address().zipCode().substring(0,5);
+        zip.sendKeys(zipFive);
 
         List<Integer> givenList = Arrays.asList(1, 2, 3); // dynamic way to randomly select a credit card and click (may also be used with Strings)
         int card = (int) (1 + Math.random() * givenList.size());
@@ -110,8 +105,7 @@ public class projectTwo {
         String dateStr = date.format(formatter);
         expiration.sendKeys(dateStr);
 
-        WebElement processButton = driver.findElement(By.id("ctl00_MainContent_fmwOrder_InsertButton"));
-        processButton.click();
+        driver.findElement(By.id("ctl00_MainContent_fmwOrder_InsertButton")).click();
 
         Thread.sleep(300);
 
@@ -120,14 +114,15 @@ public class projectTwo {
         String text = "New order has been successfully added."; // checking if the Source code contains the needed text
         Assert.assertTrue(pageSource.contains(text), "The needed text was not found, this may be a wrong page.");
 
-        WebElement allOrdersLink = driver.findElement(By.linkText("View all orders")); // finding the "View All Orders" link
-        allOrdersLink.click(); // clicking
+        driver.findElement(By.linkText("View all orders")).click(); // finding the "View All Orders" link
 
-        --------
-        String firstRow =  driver.findElement(By.id("ctl00_MainContent_orderGrid_ctl02_OrderSelector").getText()); // getting text
-        String text2 = ""; // checking if the Source code contains the needed text
-        Assert.assertTrue(pageSource.contains(text), "The needed text was not found, the order was not placed.");
-        --------
+//        --------
+        List<WebElement> firstRow = driver.findElements(By.className("SampleTable")); // getting text
+        for (WebElement result : firstRow){result.getText();
+            System.out.println(result.getText());};
+//        String text2 = ""; // checking if the Source code contains the needed text
+//        Assert.assertTrue(pageSource.contains(text), "The needed text was not found, the order was not placed.");
+//        --------
 
         // driver.close();
 
