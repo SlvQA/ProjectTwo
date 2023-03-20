@@ -56,7 +56,7 @@ public class projectTwo {
             correctTotal = quant * 100;
         } else {
             correctTotal = quant * (100 - (100 * 8) / 100);
-        };
+        }
 
         Assert.assertEquals(actualTotal, correctTotal, "Total was calculated incorrectly.");
 
@@ -116,13 +116,14 @@ public class projectTwo {
 
         driver.findElement(By.linkText("View all orders")).click(); // finding the "View All Orders" link
 
-//        --------
-        List<WebElement> firstRow = driver.findElements(By.className("SampleTable")); // getting text
-        for (WebElement result : firstRow){result.getText();
-            System.out.println(result.getText());};
+        List<WebElement> firstRow = driver.findElements(By.xpath("//table[@class='SampleTable']"));
+        for (WebElement result : firstRow){
+            System.out.println(result.getText());}
+
+
 //        String text2 = ""; // checking if the Source code contains the needed text
 //        Assert.assertTrue(pageSource.contains(text), "The needed text was not found, the order was not placed.");
-//        --------
+
 
         // driver.close();
 
