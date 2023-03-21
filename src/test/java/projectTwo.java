@@ -12,6 +12,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @Test
 public class projectTwo {
@@ -20,6 +21,8 @@ public class projectTwo {
         options.addArguments("--remote-allow-origins=*");
 
         WebDriver driver = new ChromeDriver(options);
+        driver.manage().window().maximize();
+        driver.manage().timeouts().implicitlyWait(3, TimeUnit.SECONDS); // implicit wait time
         driver.get("http://secure.smartbearsoftware.com/samples/TestComplete12/WebOrders/Login.aspx"); // navigate to the website
         String actualTitle = driver.getTitle(); // returns the Title of the page
         String expectedTitle = "Web Orders Login";
@@ -43,6 +46,7 @@ public class projectTwo {
         WebElement quantity = driver.findElement(By.id("ctl00_MainContent_fmwOrder_txtQuantity")); // input of quantity
         quantity.sendKeys("" + (int) Math.abs(1 + Math.random() * 100));
         int quant = Integer.parseInt(quantity.getAttribute("value")); // storing quantity for future use
+        String quantityString = String.valueOf(quant);
 
         Thread.sleep(300);
 
@@ -64,32 +68,40 @@ public class projectTwo {
         Faker faker = new Faker();
         WebElement customerName = driver.findElement(By.id("ctl00_MainContent_fmwOrder_txtName"));
         customerName.sendKeys(faker.name().firstName() + " " + faker.name().lastName());
+        String fullName = customerName.getAttribute("value");
         WebElement street = driver.findElement(By.id("ctl00_MainContent_fmwOrder_TextBox2"));
         street.sendKeys(faker.address().streetAddress());
+        String streetName = street.getAttribute("value");
         WebElement city = driver.findElement(By.id("ctl00_MainContent_fmwOrder_TextBox3"));
         city.sendKeys(faker.address().city());
+        String cityName = city.getAttribute("value");
         WebElement state = driver.findElement(By.id("ctl00_MainContent_fmwOrder_TextBox4")); // creating email
         state.sendKeys(faker.address().state());
+        String stateName = state.getAttribute("value");
         WebElement zip = driver.findElement(By.id("ctl00_MainContent_fmwOrder_TextBox5"));  // copying as a confirmation of the email
         String zipFive = faker.address().zipCode().substring(0,5);
         zip.sendKeys(zipFive);
 
         List<Integer> givenList = Arrays.asList(1, 2, 3); // dynamic way to randomly select a credit card and click (may also be used with Strings)
         int card = (int) (1 + Math.random() * givenList.size());
-
+        String cardType = null;
         // int card = (int) (1 + Math.random() * 3); // an easier, but hardcoded way to randomly select a credit card and click
+
         switch (card) {
             case 1:
                 WebElement visa = driver.findElement(By.id("ctl00_MainContent_fmwOrder_cardList_0"));
                 visa.click();
+                cardType = "Visa";
                 break;
             case 2:
                 WebElement mastercard = driver.findElement(By.id("ctl00_MainContent_fmwOrder_cardList_1"));
                 mastercard.click();
+                cardType = "MasterCard";
                 break;
             case 3:
                 WebElement amex = driver.findElement(By.id("ctl00_MainContent_fmwOrder_cardList_2"));
                 amex.click();
+                cardType = "American Express";
                 break;
         }
 
@@ -112,6 +124,10 @@ public class projectTwo {
         String dateStr = date.format(formatter);
         expiration.sendKeys(dateStr);
 
+        LocalDate datePlaced = LocalDate.now();
+        DateTimeFormatter formatter2 = DateTimeFormatter.ofPattern("MM/dd/YYYY");
+        String dateNow = String.valueOf(datePlaced.format(formatter2));
+
         driver.findElement(By.id("ctl00_MainContent_fmwOrder_InsertButton")).click();
 
         Thread.sleep(300);
@@ -123,13 +139,13 @@ public class projectTwo {
 
         driver.findElement(By.linkText("View all orders")).click(); // finding the "View All Orders" link
 
-        LocalDate datePlaced = LocalDate.now();
         List<WebElement> tds = driver.findElements(By.xpath("//table[@class='SampleTable']//tr[2]//td"));
         List<String> firstRow = new ArrayList<>();
         for (WebElement element : tds){
             firstRow.add(element.getText());}
 
-        Assert.assertEquals(firstRow, List.of("", customerName, "MyMoney", quant, datePlaced, street, city, state, zipFive, card, crdNum, expiration, ""));
+        Assert.assertEquals(firstRow, List.of
+                ("", fullName, "MyMoney", quantityString, dateNow, streetName, cityName, stateName, zipFive, cardType, crdNum, dateStr, ""));
 
         driver.findElement(By.id("ctl00_logout")).click();
 
